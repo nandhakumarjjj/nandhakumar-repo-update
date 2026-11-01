@@ -1,5 +1,6 @@
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import ExplodedView from './components/ExplodedView';
 import About from './components/About';
 import Skills from './components/Skills';
 import Experience from './components/Experience';
@@ -15,6 +16,7 @@ export default function App() {
     <div className="min-h-screen bg-deeper text-gray-200 font-sans">
       <Navbar />
       <Hero />
+      <ExplodedView />
       <About />
       <Skills />
       <Experience />

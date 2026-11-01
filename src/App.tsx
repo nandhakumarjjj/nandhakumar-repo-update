@@ -1,6 +1,6 @@
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import ExplodedView from './components/ExplodedView';
+import ScrollBackdrop from './components/ScrollBackdrop';
 import About from './components/About';
 import Skills from './components/Skills';
 import Experience from './components/Experience';
@@ -14,18 +14,20 @@ import Footer from './components/Footer';
 export default function App() {
   return (
     <div className="min-h-screen bg-deeper text-gray-200 font-sans">
-      <Navbar />
-      <Hero />
-      <ExplodedView />
-      <About />
-      <Skills />
-      <Experience />
-      <Projects />
-      <Education />
-      <Certifications />
-      <Achievements />
-      <Contact />
-      <Footer />
+      <ScrollBackdrop />
+      <div className="relative z-10">
+        <Navbar />
+        <Hero />
+        <About />
+        <Skills />
+        <Experience />
+        <Projects />
+        <Education />
+        <Certifications />
+        <Achievements />
+        <Contact />
+        <Footer />
+      </div>
     </div>
   );
 }

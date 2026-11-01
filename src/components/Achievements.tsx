@@ -52,7 +52,7 @@ const extracurricular = [
 
 export default function Achievements() {
   return (
-    <section id="achievements" className="py-24 relative bg-deeper/50">
+    <section id="achievements" className="py-24 relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div

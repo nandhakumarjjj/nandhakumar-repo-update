@@ -37,7 +37,7 @@ const education = [
 
 export default function Education() {
   return (
-    <section id="education" className="py-24 relative bg-deeper/50">
+    <section id="education" className="py-24 relative">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div

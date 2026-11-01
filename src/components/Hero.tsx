@@ -63,12 +63,12 @@ export default function Hero() {
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-deeper via-dark to-navy" />
+      <div className="absolute inset-0 bg-gradient-to-br from-deeper/30 via-dark/10 to-navy/20" />
       <CircuitBoard />
       <FloatingParticles />
 
       {/* Radial gradient overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(15,15,26,0.8)_80%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(15,15,26,0.55)_80%)]" />
 
       {/* Accent bar at top */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent" />

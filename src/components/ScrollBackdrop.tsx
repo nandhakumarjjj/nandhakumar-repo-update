@@ -143,20 +143,20 @@ export default function ScrollBackdrop() {
   return (
     <div
       aria-hidden
-      className="fixed inset-0 z-0 flex items-center justify-center md:justify-end overflow-hidden pointer-events-none"
+      className="fixed inset-0 z-0 flex items-center justify-center overflow-hidden pointer-events-none"
     >
-      {/* stage: docked toward the right-hand side on desktop (the right panels slide
-          off-screen there) so the page content on the left/center doesn't cover it; phones show only the artwork column, centered */}
-      <div className="relative aspect-[830/1024] w-[120vw] md:aspect-[3/2] md:w-[min(78vw,calc(100vh_*_1.25))] md:translate-x-[18vw] opacity-[0.88]">
-        {/* glow behind the assembled unit (follows the stage) */}
-        <motion.div
-          className="absolute inset-0"
-          style={{
-            opacity: glow,
-            background:
-              'radial-gradient(ellipse 40% 30% at 50% 52%, rgba(0,180,216,0.22), rgba(0,180,216,0) 70%)',
-          }}
-        />
+      {/* glow behind the assembled unit */}
+      <motion.div
+        className="absolute inset-0"
+        style={{
+          opacity: glow,
+          background:
+            'radial-gradient(ellipse 40% 30% at 50% 52%, rgba(0,180,216,0.22), rgba(0,180,216,0) 70%)',
+        }}
+      />
+
+      {/* stage: phones show only the artwork column (labels / panels hidden) */}
+      <div className="relative aspect-[830/1024] w-[120vw] md:aspect-[3/2] md:w-[min(104vw,calc(100vh_*_1.55))] opacity-[0.88]">
         <div className="absolute top-0 h-full w-[185%] -left-[36.14%] md:w-full md:left-0">
           <div style={{ perspective: '1800px' }} className="absolute inset-0">
             <motion.div

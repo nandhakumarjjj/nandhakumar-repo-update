@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { ArrowDownUp } from 'lucide-react';
 import {
   motion,
   useScroll,
@@ -21,7 +23,10 @@ import {
  * smoothed with a spring so wheel and trackpad jumps still look fluid.
  *
  * Artwork: transparent layer slices in /public/exploded/*.webp
- * Flip behaviour (assemble on scroll down) by setting EXPLODE_ON_SCROLL_DOWN = false.
+ * A floating button lets the visitor invert the direction at any time:
+ *   default  -> top: assembled, bottom: exploded
+ *   inverted -> top: exploded,  bottom: assembled
+ * The default is set by EXPLODE_ON_SCROLL_DOWN.
  */
 const EXPLODE_ON_SCROLL_DOWN = true;
 
@@ -127,7 +132,24 @@ export default function ScrollBackdrop() {
   // progress of the WHOLE page: 0 at the top, 1 at the very bottom
   const { scrollYProgress } = useScroll();
 
-  const assembly = useTransform(scrollYProgress, (v) => (EXPLODE_ON_SCROLL_DOWN ? 1 - v : v));
+  // direction toggle (1 = explode while scrolling down, 0 = assemble while scrolling down)
+  const [explodeDown, setExplodeDown] = useState(EXPLODE_ON_SCROLL_DOWN);
+  const dir = useMotionValue(EXPLODE_ON_SCROLL_DOWN ? 1 : 0);
+  useEffect(() => {
+    dir.set(explodeDown ? 1 : 0);
+  }, [explodeDown, dir]);
+
+  // the button is a compact icon; its label shows for a few seconds after load / each click, and on hover
+  const [hint, setHint] = useState(true);
+  const [hover, setHover] = useState(false);
+  useEffect(() => {
+    if (!hint) return;
+    const id = window.setTimeout(() => setHint(false), 4500);
+    return () => window.clearTimeout(id);
+  }, [hint, explodeDown]);
+
+  // the spring below animates smoothly to the new target whenever the direction flips
+  const assembly = useTransform([scrollYProgress, dir], ([v, d]: number[]) => (d ? 1 - v : v));
   const spring = useSpring(assembly, { stiffness: 140, damping: 28, mass: 0.35, restDelta: 0.0001 });
   const still = useMotionValue(1);
   const progress = reduceMotion ? still : spring;
@@ -141,6 +163,7 @@ export default function ScrollBackdrop() {
   const glow = useTransform(progress, [0.55, 0.95], [0.1, 0.8]);
 
   return (
+    <>
     <div
       aria-hidden
       className="fixed inset-0 z-0 flex items-center justify-center overflow-hidden pointer-events-none"
@@ -200,5 +223,39 @@ export default function ScrollBackdrop() {
         }}
       />
     </div>
+
+    {/* direction toggle */}
+    {!reduceMotion && (
+      <button
+        type="button"
+        onClick={() => {
+          setExplodeDown((v) => !v);
+          setHint(true);
+        }}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        onFocus={() => setHover(true)}
+        onBlur={() => setHover(false)}
+        aria-pressed={!explodeDown}
+        aria-label={
+          explodeDown
+            ? 'Invert 3D animation: currently top assembled, bottom exploded'
+            : 'Invert 3D animation: currently top exploded, bottom assembled'
+        }
+        title="Invert the 3D animation direction"
+        className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-xl px-3 py-2.5 text-[11px] font-mono glass-effect border border-accent/40 text-accent hover:border-accent hover:text-white shadow-lg shadow-black/30 transition-colors cursor-pointer"
+      >
+        <motion.span animate={{ rotate: explodeDown ? 0 : 180 }} transition={{ duration: 0.4 }} className="flex">
+          <ArrowDownUp size={16} />
+        </motion.span>
+        {(hint || hover) && (
+          <span className="hidden sm:flex flex-col items-start leading-tight text-left">
+            <span className="text-gray-400 uppercase tracking-widest text-[9px]">3D direction</span>
+            <span>{explodeDown ? 'Top: Assembled → Bottom: Exploded' : 'Top: Exploded → Bottom: Assembled'}</span>
+          </span>
+        )}
+      </button>
+    )}
+    </>
   );
 }
